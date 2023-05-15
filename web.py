@@ -5,7 +5,7 @@ import mdtex2html
 import requests
 import json
 import os
-
+from config import *
 from dotenv import load_dotenv, find_dotenv
 
 _ = load_dotenv(find_dotenv())
@@ -14,11 +14,6 @@ chatglm_endpoint_chat = os.getenv("chatglm_endpoint_chat")
 chatglm_endpoint_chat_stream = os.getenv("chatglm_endpoint_chat_stream")
 emdbeddings_endpoint = os.getenv("emdbeddings_endpoint")
 searchvectorsbase_endpoint = os.getenv("searchvectorsbase_endpoint")
-prompt_template = """已知信息：
-{context} 
-
-根据上述已知信息，简洁和专业的来回答用户的问题。如果无法从中得到答案，请说 “根据已知信息无法回答该问题” 或 “没有提供足够的相关信息”，不允许在答案中添加编造成分，答案请使用中文。 问题是：{question}"""
-
 
 """Override Chatbot.postprocess"""
 
@@ -161,12 +156,12 @@ with gr.Blocks() as demo:
             conversation_turn = gr.Slider(5, 10, value=5, step=1, label="conversation_turn", interactive=True)
             stream = gr.Checkbox(label="stream_out", value=True, interactive=True)
             vector_base = gr.Checkbox(label="vector_base", value=False, interactive=True)
-            with gr.Tab(label="vector_base"):
-                File = gr.File(label="add_file",
-                    file_types=['.txt'],
-                    file_count="single",
-                    show_label=False)
-                load_file_button = gr.Button("add file and load vector knowledge base based on the file")
+        with gr.Tab(label="vector_base"):
+            File = gr.File(label="add_file",
+                file_types=['.txt'],
+                file_count="single",
+                show_label=False)
+            load_file_button = gr.Button("add file and load vector knowledge base based on the file")
     history = gr.State([])
 
     index_name = gr.State("")
