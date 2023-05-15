@@ -1,6 +1,6 @@
 # GLMbot
 A qa bot based on Chatglm
-# QucikStart
+# QuickStart
 ## 1. Install Python Packages
 ```pip3 install -r requirements.txt```
 ## 2. Configuration Environment
