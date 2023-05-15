@@ -98,7 +98,6 @@ async def get_similarity_answer (params: Params):
     query = params.prompt
     docsearch = Pinecone.from_existing_index(index_name, embeddings)
     results = docsearch.similarity_search(query, k=2)
-    print(results)
     docs = [results[i].page_content for i in range(len(results))]
     content = {
         "results": docs
@@ -119,7 +118,6 @@ async def embeddings_text (file: UploadFile = File(...)):
   target_file_path = os.path.join(target_directory, file.filename)  # build the path of the file
   with open(target_file_path, "wb") as f:
         f.write(content)
-  print(os.path.splitext(file.filename)[0])
   index_name = os.path.splitext(file.filename)[0]
   indexes = pinecone.list_indexes()  #  delete existed indexes
   if len(indexes) != 0:
@@ -128,7 +126,7 @@ async def embeddings_text (file: UploadFile = File(...)):
   pinecone.create_index(index_name, dimension=1024, metric="euclidean")       
   loader = TextLoader(target_file_path,encoding="utf-8")
   documents = loader.load()
-  text_splitter = CharacterTextSplitter(chunk_size=256, chunk_overlap=0)
+  text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=0)
   docs = text_splitter.split_documents(documents)
   docsearch = Pinecone.from_documents(docs, embeddings, index_name=index_name)
   message = {
